@@ -1,0 +1,95 @@
+# reads info from webpage
+# gets page
+# reads titles, artists, countries, prices and years at tags and adds to array
+# displays as parallel arrays
+# returns total items and average price
+
+import urllib.request
+
+
+def get_page():
+    url = "https://www.w3schools.com/xml/cd_catalog.xml"
+    page = urllib.request.urlopen(url).read().decode()
+    return page
+
+
+def get_title(page):
+    titles = []
+    for line in page.split('\n'):
+        index = line.find("<TITLE>")
+        index2 = line.find("</TITLE>")
+        if index >= 0:
+            title = line[index:index2]
+            titles.append(title.split('<TITLE>')[1])
+
+    return titles
+
+
+def get_artist(page):
+    artists = []
+    for line in page.split('\n'):
+        index = line.find("<ARTIST>")
+        index2 = line.find("</ARTIST>")
+        if index >= 0:
+            artist = line[index:index2]
+            artists.append(artist.split('<ARTIST>')[1])
+
+    return artists
+
+
+def get_country(page):
+    countries = []
+    for line in page.split('\n'):
+        index = line.find("<COUNTRY>")
+        index2 = line.find("</COUNTRY>")
+        if index >= 0:
+            country = line[index:index2]
+            countries.append(country.split('<COUNTRY>')[1])
+
+    return countries
+
+
+def get_price(page):
+    prices = []
+    for line in page.split('\n'):
+        index = line.find("<PRICE>")
+        index2 = line.find("</PRICE>")
+        if index >= 0:
+            price = line[index:index2]
+            prices.append(price.split('<PRICE>')[1])
+
+    return prices
+
+
+def get_year(page):
+    years = []
+    for line in page.split('\n'):
+        index = line.find("<YEAR>")
+        index2 = line.find("</YEAR>")
+        if index >= 0:
+            year = line[index:index2]
+            years.append(year.split('<YEAR>')[1])
+
+    return years
+
+
+def display_items(titles, artists, countries, prices, years):
+    for index in range(len(titles)):
+        print(titles[index] + " " + artists[index] + " " + countries[index] +
+              " " + prices[index] + " " + years[index])
+
+
+def main():
+    page = get_page()
+    titles = get_title(page)
+    artists = get_artist(page)
+    countries = get_country(page)
+    prices = get_price(page)
+    years = get_year(page)
+    display_items(titles, artists, countries, prices, years)
+    float_prices = [float(x) for x in prices]
+    print(len(titles), " items-$",
+          sum(float_prices)/len(float_prices), " average price")
+
+main()
+
